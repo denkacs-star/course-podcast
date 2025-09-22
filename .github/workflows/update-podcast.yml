@@ -3,6 +3,8 @@ on:
   schedule:
     - cron: '0 */4 * * *'  # Alle 4 Stunden
   workflow_dispatch:  # Manuell auslösbar
+  push:
+    branches: [ main ]
 
 jobs:
   update-podcast:
@@ -11,8 +13,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          
+          token: ${{ secrets.GITHUB_TOKEN }}  # Korrektes Token
+        
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
@@ -26,20 +28,15 @@ jobs:
         run: |
           python scripts/podcast_generator.py
           
-      - name: Check if feed was created
-        run: |
-          if [ -f "feed.rss" ]; then
-            echo "✅ RSS feed created successfully"
-            cat feed.rss | head -5
-          else
-            echo "❌ No RSS file found"
-            exit 1
-          fi
-          
       - name: Commit and push changes
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
           git add feed.rss
-          git diff --quiet && git diff --staged --quiet || git commit -m "Auto-update podcast feed"
-          git push
+          # Nur committen wenn Änderungen vorhanden
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Auto-update podcast feed [skip ci]"
+            git push
+          fi
