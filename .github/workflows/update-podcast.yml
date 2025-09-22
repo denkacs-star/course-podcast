@@ -1,10 +1,8 @@
 name: Update Course Podcast
 on:
   schedule:
-    - cron: '0 */4 * * *'  # Alle 4 Stunden
-  workflow_dispatch:  # Manuell auslösbar
-  push:
-    branches: [ main ]
+    - cron: '0 */4 * * *'
+  workflow_dispatch:
 
 jobs:
   update-podcast:
@@ -13,7 +11,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}  # Korrektes Token
+          token: ${{ secrets.GITHUB_TOKEN }}
         
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -22,21 +20,40 @@ jobs:
           
       - name: Install dependencies
         run: |
-          pip install yt-dlp podgen
+          pip install yt-dlp
+          
+      - name: Debug - List files before
+        run: |
+          echo "Current directory:"
+          pwd
+          echo "Files:"
+          ls -la
           
       - name: Run podcast generator
         run: |
           python scripts/podcast_generator.py
+          
+      - name: Debug - Check feed content
+        run: |
+          echo "=== Feed RSS Content ==="
+          if [ -f "feed.rss" ]; then
+            head -20 feed.rss
+            echo "..."
+            echo "Line count:"
+            wc -l feed.rss
+          else
+            echo "❌ feed.rss does not exist!"
+          fi
           
       - name: Commit and push changes
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add feed.rss
-          # Nur committen wenn Änderungen vorhanden
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "Auto-update podcast feed [skip ci]"
+          if ! git diff --staged --quiet; then
+            git commit -m "Auto-update podcast feed"
             git push
+            echo "✅ Changes pushed successfully"
+          else
+            echo "ℹ️ No changes to commit"
           fi
