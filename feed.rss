@@ -1,0 +1,16 @@
+
+## 🚀 Verwendung in Podcast Apps
+
+1. **Apple Podcasts**: Abonnieren → URL eingeben
+2. **Spotify**: Einstellungen → Import podcast → RSS feed
+3. **Andere Apps**: Manuelle URL-Eingabe
+
+## ⚙️ Technische Details
+
+- Automatische Updates alle 4 Stunden
+- Generiert mit Python + yt-dlp
+- Hosted on GitHub Pages
+
+## 🔄 Manuelles Update
+
+Gehe zu **Actions** → **Update Course Podcast** → **Run workflow**
