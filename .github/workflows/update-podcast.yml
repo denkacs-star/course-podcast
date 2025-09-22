@@ -1,10 +1,8 @@
 name: Update Course Podcast
 on:
   schedule:
-    - cron: '0 */4 * * *'  # Alle 4 Stunden prüfen
+    - cron: '0 */4 * * *'  # Alle 4 Stunden
   workflow_dispatch:  # Manuell auslösbar
-  push:
-    branches: [ main ]
 
 jobs:
   update-podcast:
@@ -27,6 +25,16 @@ jobs:
       - name: Run podcast generator
         run: |
           python scripts/podcast_generator.py
+          
+      - name: Check if feed was created
+        run: |
+          if [ -f "feed.rss" ]; then
+            echo "✅ RSS feed created successfully"
+            cat feed.rss | head -5
+          else
+            echo "❌ No RSS file found"
+            exit 1
+          fi
           
       - name: Commit and push changes
         run: |
