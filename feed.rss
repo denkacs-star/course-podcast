@@ -1,11 +1,72 @@
-<?xml version="1.0" encoding="utf-8"?>
-<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0">
-  <channel>
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
     <title>Course Edu Podcast</title>
-    <description>Audio podcast from Course Edu YouTube channel</description>
     <link>https://www.youtube.com/@course_edu</link>
-    <language>de-DE</language>
-    <generator>YouTube to Podcast Converter</generator>
-    <lastBuildDate>Mon, 22 Sep 2025 18:55:16 GMT</lastBuildDate>
-  </channel>
+    <description>Course Edu YouTube videos as podcast</description>
+    <language>de</language>
+
+    <item>
+        <title>Александр Архангельский. Ключевые тексты эпохи 1990-х и трансформация через культуру / Лекция №8</title>
+        <enclosure url="https://www.youtube.com/watch?v=WDT_SHAk5dE" type="audio/mpeg"/>
+        <link>https://www.youtube.com/watch?v=WDT_SHAk5dE</link>
+        <guid>https://www.youtube.com/watch?v=WDT_SHAk5dE</guid>
+    </item>
+
+    <item>
+        <title>Галина Юзефович. Литература в 1990-е: отложенный спрос и кризис перепроизводства / Лекция №7</title>
+        <enclosure url="https://www.youtube.com/watch?v=SpR06BFRxdA" type="audio/mpeg"/>
+        <link>https://www.youtube.com/watch?v=SpR06BFRxdA</link>
+        <guid>https://www.youtube.com/watch?v=SpR06BFRxdA</guid>
+    </item>
+
+    <item>
+        <title>Екатерина Шульман. Как менялась Дума на протяжении трёх первых созывов / Лекция №6</title>
+        <enclosure url="https://www.youtube.com/watch?v=fEaANGgCKRo" type="audio/mpeg"/>
+        <link>https://www.youtube.com/watch?v=fEaANGgCKRo</link>
+        <guid>https://www.youtube.com/watch?v=fEaANGgCKRo</guid>
+    </item>
+
+    <item>
+        <title>Дмитрий Муратов. Появление свободной прессы СССР, и её развитие в 90-е / Лекция №5</title>
+        <enclosure url="https://www.youtube.com/watch?v=KP48Zw8gEg0" type="audio/mpeg"/>
+        <link>https://www.youtube.com/watch?v=KP48Zw8gEg0</link>
+        <guid>https://www.youtube.com/watch?v=KP48Zw8gEg0</guid>
+    </item>
+
+    <item>
+        <title>Ксения Лученко. Церковь, общество и власть в 1990-е / Лекция №4</title>
+        <enclosure url="https://www.youtube.com/watch?v=cKn2X0an4kQ" type="audio/mpeg"/>
+        <link>https://www.youtube.com/watch?v=cKn2X0an4kQ</link>
+        <guid>https://www.youtube.com/watch?v=cKn2X0an4kQ</guid>
+    </item>
+
+    <item>
+        <title>Виктор Вахштайн. «Легенда о 1990-х» в структуре коллективной памяти / Лекция №3</title>
+        <enclosure url="https://www.youtube.com/watch?v=22wp-ciHd9g" type="audio/mpeg"/>
+        <link>https://www.youtube.com/watch?v=22wp-ciHd9g</link>
+        <guid>https://www.youtube.com/watch?v=22wp-ciHd9g</guid>
+    </item>
+
+    <item>
+        <title>Ирина Щербакова. 10 лет борьбы за память / Лекция №2</title>
+        <enclosure url="https://www.youtube.com/watch?v=HdL09cAFdwg" type="audio/mpeg"/>
+        <link>https://www.youtube.com/watch?v=HdL09cAFdwg</link>
+        <guid>https://www.youtube.com/watch?v=HdL09cAFdwg</guid>
+    </item>
+
+    <item>
+        <title>Кирилл Рогов. Политическая экономия и последствия либерализации 1990-х / Лекция №1</title>
+        <enclosure url="https://www.youtube.com/watch?v=JHKDuDObHAg" type="audio/mpeg"/>
+        <link>https://www.youtube.com/watch?v=JHKDuDObHAg</link>
+        <guid>https://www.youtube.com/watch?v=JHKDuDObHAg</guid>
+    </item>
+
+    <item>
+        <title>Трейлер. Курс: Попытка демократии: Россия 1989–1999. Экономика, политика, общество, культура и медиа</title>
+        <enclosure url="https://www.youtube.com/watch?v=-mSVV7o9844" type="audio/mpeg"/>
+        <link>https://www.youtube.com/watch?v=-mSVV7o9844</link>
+        <guid>https://www.youtube.com/watch?v=-mSVV7o9844</guid>
+    </item>
+</channel>
 </rss>
