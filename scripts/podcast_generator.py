@@ -13,11 +13,16 @@ def generate_rss():
         }
         
         print("🔄 Fetching videos from YouTube...")
+        # KORREKT: Verwende yt_dlp direkt (nicht youtube_dlp)
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(CHANNEL_URL, download=False)
             videos = info.get('entries', [])[:10]
         
         print(f"✅ Found {len(videos)} videos")
+        
+        # Debug: Zeige die ersten 3 Videos
+        for i, video in enumerate(videos[:3]):
+            print(f"🎬 {i+1}. {video.get('title', 'No title')}")
         
         rss = f'''<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
@@ -52,8 +57,15 @@ def generate_rss():
         
     except Exception as e:
         print(f"❌ Error: {e}")
+        # Erstelle einen minimalen Fallback-Feed
         with open('feed.rss', 'w') as f:
-            f.write('<?xml version="1.0"?><rss version="2.0"><channel><title>Error</title></channel></rss>')
+            f.write('''<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+    <title>Course Edu Podcast</title>
+    <description>Error loading content</description>
+</channel>
+</rss>''')
 
 if __name__ == "__main__":
     generate_rss()
