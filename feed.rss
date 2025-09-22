@@ -1,16 +1,11 @@
-
-## 🚀 Verwendung in Podcast Apps
-
-1. **Apple Podcasts**: Abonnieren → URL eingeben
-2. **Spotify**: Einstellungen → Import podcast → RSS feed
-3. **Andere Apps**: Manuelle URL-Eingabe
-
-## ⚙️ Technische Details
-
-- Automatische Updates alle 4 Stunden
-- Generiert mit Python + yt-dlp
-- Hosted on GitHub Pages
-
-## 🔄 Manuelles Update
-
-Gehe zu **Actions** → **Update Course Podcast** → **Run workflow**
+<?xml version="1.0" encoding="utf-8"?>
+<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0">
+  <channel>
+    <title>Course Edu Podcast</title>
+    <description>Audio podcast from Course Edu YouTube channel</description>
+    <link>https://www.youtube.com/@course_edu</link>
+    <language>de-DE</language>
+    <generator>YouTube to Podcast Converter</generator>
+    <lastBuildDate>Mon, 22 Sep 2025 18:54:32 GMT</lastBuildDate>
+  </channel>
+</rss>
