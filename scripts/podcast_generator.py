@@ -1,17 +1,14 @@
 #!/usr/bin/env python3
 import yt_dlp as youtube_dl
-from podgen import Podcast, Episode, Media
+from podgen import Podcast, Episode, Media, Category
+from datetime import datetime
 import os
-import json
-from datetime import datetime, timedelta
-import hashlib
 
 # Configuration
 CHANNEL_URL = "https://www.youtube.com/@course_edu"
 PODCAST_TITLE = "Course Edu Podcast"
 PODCAST_DESCRIPTION = "Audio podcast generated from Course Edu YouTube channel"
 PODCAST_WEBSITE = "https://denkacs-star.github.io/course-podcast/"
-PODCAST_IMAGE = "https://denkacs-star.github.io/course-podcast/cover.jpg"
 AUTHOR = "Course Edu"
 
 def get_video_info():
@@ -19,83 +16,75 @@ def get_video_info():
     ydl_opts = {
         'quiet': True,
         'extract_flat': True,
-        'force_json': True,
     }
     
     try:
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-            # Get channel info and videos
             info = ydl.extract_info(CHANNEL_URL, download=False)
-            
             if 'entries' in info:
-                return info['entries']
+                return info['entries'][:15]  # Nur die 15 neuesten Videos
             else:
                 return [info]
     except Exception as e:
         print(f"Error fetching videos: {e}")
         return []
 
-def generate_audio_url(video_id):
-    """Generate direct audio URL (this is a simplified approach)"""
-    # Note: In practice, you might need to use a service or different method
-    # This is a placeholder for the actual audio extraction
-    return f"https://youtube.com/watch?v={video_id}"
-
 def create_podcast_feed():
     """Create and update the podcast RSS feed"""
     
-    # Create podcast object
     podcast = Podcast(
         name=PODCAST_TITLE,
         description=PODCAST_DESCRIPTION,
         website=PODCAST_WEBSITE,
-        image=PODCAST_IMAGE,
         explicit=False,
         authors=[AUTHOR],
         language="de",
-        category="Education",
+        category=Category("Education"),  # Korrigierte Kategorie
     )
     
-    # Get videos from channel
     videos = get_video_info()
     
-    # Sort by upload date (newest first)
-    videos.sort(key=lambda x: x.get('upload_date', ''), reverse=True)
+    print(f"Found {len(videos)} videos")
     
-    # Add episodes (limit to 20 most recent)
-    for video in videos[:20]:
+    for video in videos:
         video_id = video.get('id')
         title = video.get('title', 'Unknown Title')
-        description = video.get('description', '')[:500] + "..." if len(video.get('description', '')) > 500 else video.get('description', '')
-        upload_date = video.get('upload_date', '20230101')
+        description = video.get('description', '')[:200] + "..." if video.get('description') else ""
+        duration = video.get('duration', 0)
         
-        # Convert YYYYMMDD to datetime
-        try:
-            pub_date = datetime.strptime(upload_date, '%Y%m%d')
-        except:
+        # YouTube URL für Audio
+        audio_url = f"https://www.youtube.com/watch?v={video_id}"
+        
+        # Upload-Datum verarbeiten
+        upload_date = video.get('upload_date', '')
+        if upload_date:
+            try:
+                pub_date = datetime.strptime(upload_date, '%Y%m%d')
+            except:
+                pub_date = datetime.now()
+        else:
             pub_date = datetime.now()
         
-        # Generate audio URL (simplified)
-        audio_url = generate_audio_url(video_id)
-        
-        # Create episode
-        episode = Episode(
-            title=title,
-            summary=description,
-            media=Media(
-                audio_url,
-                size=0,  # Size would need to be determined
-                duration=video.get('duration', 0)
-            ),
-            publication_date=pub_date,
-            link=f"https://youtube.com/watch?v={video_id}"
-        )
-        
-        podcast.episodes.append(episode)
+        try:
+            episode = Episode(
+                title=title,
+                summary=description,
+                media=Media(audio_url, duration=duration),
+                publication_date=pub_date,
+                link=audio_url
+            )
+            
+            podcast.episodes.append(episode)
+            print(f"✅ Added episode: {title}")
+        except Exception as e:
+            print(f"❌ Error adding episode {title}: {e}")
     
-    # Generate RSS feed
-    podcast.rss_file('../feed.rss', encoding='UTF-8')
-    print(f"Podcast feed updated with {len(podcast.episodes)} episodes")
+    # RSS Feed generieren
+    try:
+        podcast.rss_file('feed.rss', encoding='UTF-8')
+        print(f"✅ Success! Podcast feed generated with {len(podcast.episodes)} episodes")
+    except Exception as e:
+        print(f"❌ Error generating RSS feed: {e}")
 
 if __name__ == "__main__":
     create_podcast_feed()
