@@ -1,100 +1,59 @@
 #!/usr/bin/env python3
-import yt_dlp as youtube_dl  # Korrekte Import-Referenz
+import yt_dlp
 from datetime import datetime, timezone
-import xml.etree.ElementTree as ET
-from xml.dom import minidom
 
 CHANNEL_URL = "https://www.youtube.com/@course_edu"
 
-def get_videos():
-    """Get videos from YouTube channel with better error handling"""
-    ydl_opts = {
-        'quiet': False,  # Debug output anzeigen
-        'extract_flat': True,
-    }
-    
+def generate_rss():
+    """Simple working RSS generator"""
     try:
+        ydl_opts = {
+            'quiet': False, 
+            'extract_flat': True,
+        }
+        
         print("🔄 Fetching videos from YouTube...")
-        # KORREKT: Verwende youtube_dl (nach dem Import alias)
-        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(CHANNEL_URL, download=False)
-            videos = info.get('entries', [])
-            print(f"✅ Found {len(videos)} videos")
+            videos = info.get('entries', [])[:10]
+        
+        print(f"✅ Found {len(videos)} videos")
+        
+        rss = f'''<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+    <title>Course Edu Podcast</title>
+    <link>https://youtube.com/@course_edu</link>
+    <description>Course Edu YouTube videos as podcast</description>
+    <language>de</language>
+    <lastBuildDate>{datetime.now(timezone.utc).strftime('%a, %d %b %Y %H:%M:%S GMT')}</lastBuildDate>
+'''
+        
+        for video in videos:
+            video_id = video.get('id')
+            title = video.get('title', 'Video')
+            title = title.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
             
-            # Debug: Erste 3 Videos anzeigen
-            for i, video in enumerate(videos[:3]):
-                print(f"Video {i+1}: {video.get('title', 'No title')} - ID: {video.get('id')}")
-                
-            return videos[:20]  # Limit to 20 newest
+            rss += f'''
+    <item>
+        <title>{title}</title>
+        <enclosure url="https://www.youtube.com/watch?v={video_id}" type="audio/mpeg" length="0"/>
+        <link>https://www.youtube.com/watch?v={video_id}</link>
+        <guid>https://www.youtube.com/watch?v={video_id}</guid>
+    </item>
+'''
+        
+        rss += '</channel>\n</rss>'
+        
+        with open('feed.rss', 'w', encoding='utf-8') as f:
+            f.write(rss)
+        
+        print(f"🎉 Generated RSS feed with {len(videos)} episodes")
         
     except Exception as e:
-        print(f"❌ Error fetching videos: {e}")
-        return []
-
-def generate_rss():
-    """Generate proper RSS feed"""
-    videos = get_videos()
-    
-    # RSS Root mit korrekten Namespaces
-    rss = ET.Element('rss', {
-        'version': '2.0',
-        'xmlns:itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd'
-    })
-    
-    channel = ET.SubElement(rss, 'channel')
-    
-    # Channel info
-    ET.SubElement(channel, 'title').text = "Course Edu Podcast"
-    ET.SubElement(channel, 'description').text = "Audio podcast from Course Edu YouTube channel"
-    ET.SubElement(channel, 'link').text = "https://www.youtube.com/@course_edu"
-    ET.SubElement(channel, 'language').text = "de"
-    ET.SubElement(channel, 'generator').text = "YouTube to Podcast Converter"
-    ET.SubElement(channel, 'lastBuildDate').text = datetime.now(timezone.utc).strftime('%a, %d %b %Y %H:%M:%S GMT')
-    
-    # Add episodes
-    for video in videos:
-        video_id = video.get('id')
-        title = video.get('title', 'Unknown Title')
-        description = video.get('description', '')[:500] or "No description available"
-        
-        # Upload date verarbeiten
-        upload_date = video.get('upload_date', '')
-        if upload_date:
-            try:
-                pub_date = datetime.strptime(upload_date, '%Y%m%d').strftime('%a, %d %b %Y 12:00:00 GMT')
-            except:
-                pub_date = datetime.now(timezone.utc).strftime('%a, %d %b %Y %H:%M:%S GMT')
-        else:
-            pub_date = datetime.now(timezone.utc).strftime('%a, %d %b %Y %H:%M:%S GMT')
-        
-        item = ET.SubElement(channel, 'item')
-        ET.SubElement(item, 'title').text = title
-        ET.SubElement(item, 'description').text = description
-        
-        # GUID muss unique sein
-        ET.SubElement(item, 'guid', {'isPermaLink': 'true'}).text = f"https://www.youtube.com/watch?v={video_id}"
-        
-        ET.SubElement(item, 'link').text = f"https://www.youtube.com/watch?v={video_id}"
-        ET.SubElement(item, 'pubDate').text = pub_date
-        
-        # Enclosure - wichtig für Podcast Apps
-        enclosure = ET.SubElement(item, 'enclosure', {
-            'url': f"https://www.youtube.com/watch?v={video_id}",
-            'type': 'audio/mpeg',
-            'length': '0'
-        })
-        
-        print(f"✅ Added episode: {title}")
-    
-    # XML speichern
-    rough_string = ET.tostring(rss, encoding='utf-8')
-    reparsed = minidom.parseString(rough_string)
-    pretty_xml = reparsed.toprettyxml(indent="  ", encoding='utf-8')
-    
-    with open('feed.rss', 'wb') as f:
-        f.write(pretty_xml)
-    
-    print(f"🎉 RSS feed generated with {len(videos)} episodes")
+        print(f"❌ Error: {e}")
+        with open('feed.rss', 'w') as f:
+            f.write('<?xml version="1.0"?><rss version="2.0"><channel><title>Error</title></channel></rss>')
 
 if __name__ == "__main__":
     generate_rss()
