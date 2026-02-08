@@ -5,14 +5,14 @@
     <link>https://youtube.com/@course_edu</link>
     <description>Course Edu YouTube videos as podcast</description>
     <language>de</language>
-    <lastBuildDate>Sat, 07 Feb 2026 18:48:29 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 08 Feb 2026 03:27:25 GMT</lastBuildDate>
 
     <item>
         <title>Курс - Videos</title>
         <enclosure url="https://www.youtube.com/watch?v=UCgqhBhPbEhekAEYnsuzMfhg" type="audio/mpeg" length="0"/>
         <link>https://www.youtube.com/watch?v=UCgqhBhPbEhekAEYnsuzMfhg</link>
         <guid>https://www.youtube.com/watch?v=UCgqhBhPbEhekAEYnsuzMfhg</guid>
-        <pubDate>Sat, 07 Feb 2026 18:48:29 GMT</pubDate>
+        <pubDate>Sun, 08 Feb 2026 03:27:25 GMT</pubDate>
     </item>
 
     <item>
@@ -20,7 +20,7 @@
         <enclosure url="https://www.youtube.com/watch?v=UCgqhBhPbEhekAEYnsuzMfhg" type="audio/mpeg" length="0"/>
         <link>https://www.youtube.com/watch?v=UCgqhBhPbEhekAEYnsuzMfhg</link>
         <guid>https://www.youtube.com/watch?v=UCgqhBhPbEhekAEYnsuzMfhg</guid>
-        <pubDate>Sat, 07 Feb 2026 18:48:29 GMT</pubDate>
+        <pubDate>Sun, 08 Feb 2026 03:27:25 GMT</pubDate>
     </item>
 </channel>
 </rss>
